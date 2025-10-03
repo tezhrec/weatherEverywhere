@@ -35,8 +35,6 @@ export interface UVData {
 export interface SunMoonData {
   sunrise: string;
   sunset: string;
-  moonrise: string;
-  moonset: string;
   currentUV: number;
 }
 

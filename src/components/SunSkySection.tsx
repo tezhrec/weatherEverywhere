@@ -1,4 +1,4 @@
-import { Sunrise, Sunset, Moon, Sun } from 'lucide-react';
+import { Sunrise, Sunset } from 'lucide-react';
 import { UVGauge } from './UVGauge';
 import type { UVData, SunMoonData } from '../types/weather';
 
@@ -72,29 +72,17 @@ export function SunSkySection({ uvForecast, sunMoon, darkMode }: SunSkySectionPr
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-4 flex flex-col items-center justify-center transition-colors duration-300">
-          <Sunrise className="w-8 h-8 text-amber-500 mb-2" />
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-6 flex flex-col items-center justify-center transition-colors duration-300">
+          <Sunrise className="w-10 h-10 text-amber-500 mb-3" />
           <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Sunrise</div>
-          <div className="text-lg font-bold text-gray-800 dark:text-white">{sunMoon.sunrise}</div>
+          <div className="text-xl font-bold text-gray-800 dark:text-white">{sunMoon.sunrise}</div>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-4 flex flex-col items-center justify-center transition-colors duration-300">
-          <Sunset className="w-8 h-8 text-orange-500 mb-2" />
+        <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-6 flex flex-col items-center justify-center transition-colors duration-300">
+          <Sunset className="w-10 h-10 text-orange-500 mb-3" />
           <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Sunset</div>
-          <div className="text-lg font-bold text-gray-800 dark:text-white">{sunMoon.sunset}</div>
-        </div>
-
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-4 flex flex-col items-center justify-center transition-colors duration-300">
-          <Moon className="w-8 h-8 text-blue-400 mb-2" />
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Moonrise</div>
-          <div className="text-lg font-bold text-gray-800 dark:text-white">{sunMoon.moonrise}</div>
-        </div>
-
-        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-4 flex flex-col items-center justify-center transition-colors duration-300">
-          <Sun className="w-8 h-8 text-indigo-400 mb-2" />
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Moonset</div>
-          <div className="text-lg font-bold text-gray-800 dark:text-white">{sunMoon.moonset}</div>
+          <div className="text-xl font-bold text-gray-800 dark:text-white">{sunMoon.sunset}</div>
         </div>
       </div>
     </div>
