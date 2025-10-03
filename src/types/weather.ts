@@ -24,8 +24,26 @@ export interface AQIData {
   color: string;
 }
 
+export interface UVData {
+  date: string;
+  dayOfWeek: string;
+  uvIndex: number;
+  category: string;
+  color: string;
+}
+
+export interface SunMoonData {
+  sunrise: string;
+  sunset: string;
+  moonrise: string;
+  moonset: string;
+  currentUV: number;
+}
+
 export interface WeatherData {
   current: CurrentWeather;
   forecast: ForecastDay[];
   airQuality: AQIData[];
+  uvForecast: UVData[];
+  sunMoon: SunMoonData;
 }

@@ -4,6 +4,7 @@ import { WeatherCard } from './components/WeatherCard';
 import { ForecastCard } from './components/ForecastCard';
 import { TemperatureChart } from './components/TemperatureChart';
 import { AirQualityChart } from './components/AirQualityChart';
+import { SunSkySection } from './components/SunSkySection';
 import { getWeatherData, getWeatherByCoordinates } from './services/weatherService';
 import type { WeatherData } from './types/weather';
 
@@ -206,6 +207,12 @@ function App() {
         {weatherData && (
           <div className="space-y-8 animate-fadeIn">
             <WeatherCard weather={weatherData} />
+
+            <SunSkySection
+              uvForecast={weatherData.uvForecast}
+              sunMoon={weatherData.sunMoon}
+              darkMode={darkMode}
+            />
 
             <div>
               <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">5-Day Forecast</h2>

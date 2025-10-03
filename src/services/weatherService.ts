@@ -1,4 +1,4 @@
-import type { WeatherData, CurrentWeather, ForecastDay, AQIData } from '../types/weather';
+import type { WeatherData, CurrentWeather, ForecastDay, AQIData, UVData, SunMoonData } from '../types/weather';
 
 const GEOCODING_API = 'https://geocoding-api.open-meteo.com/v1/search';
 const WEATHER_API = 'https://api.open-meteo.com/v1/forecast';
@@ -79,12 +79,25 @@ function getAQICategory(aqi: number): { category: string; color: string } {
   return { category: 'Hazardous', color: '#7f1d1d' };
 }
 
+function getUVCategory(uv: number): { category: string; color: string } {
+  if (uv <= 2) return { category: 'Low', color: '#22c55e' };
+  if (uv <= 5) return { category: 'Moderate', color: '#eab308' };
+  if (uv <= 7) return { category: 'High', color: '#f97316' };
+  if (uv <= 10) return { category: 'Very High', color: '#ef4444' };
+  return { category: 'Extreme', color: '#a855f7' };
+}
+
+function formatTime(timeString: string): string {
+  const date = new Date(timeString);
+  return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+}
+
 export async function getWeatherData(cityName: string): Promise<WeatherData> {
   const location = await geocodeCity(cityName);
 
   const [weatherResponse, airQualityResponse] = await Promise.all([
     fetch(
-      `${WEATHER_API}?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=6`
+      `${WEATHER_API}?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,moonrise,moonset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=6`
     ),
     fetch(
       `${AIR_QUALITY_API}?latitude=${location.latitude}&longitude=${location.longitude}&hourly=us_aqi&timezone=auto&forecast_days=6`
@@ -120,6 +133,26 @@ export async function getWeatherData(cityName: string): Promise<WeatherData> {
     condition: getWeatherCondition(weatherData.daily.weather_code[index + 1]),
   }));
 
+  const uvForecast: UVData[] = weatherData.daily.time.slice(1, 6).map((date: string, index: number) => {
+    const uvIndex = Math.round(weatherData.daily.uv_index_max[index + 1]);
+    const { category, color } = getUVCategory(uvIndex);
+    return {
+      date,
+      dayOfWeek: getDayOfWeek(date),
+      uvIndex,
+      category,
+      color,
+    };
+  });
+
+  const sunMoon: SunMoonData = {
+    sunrise: formatTime(weatherData.daily.sunrise[0]),
+    sunset: formatTime(weatherData.daily.sunset[0]),
+    moonrise: weatherData.daily.moonrise[0] ? formatTime(weatherData.daily.moonrise[0]) : 'N/A',
+    moonset: weatherData.daily.moonset[0] ? formatTime(weatherData.daily.moonset[0]) : 'N/A',
+    currentUV: weatherData.current.uv_index || 0,
+  };
+
   const airQuality: AQIData[] = [];
   const dailyAQI: { [key: string]: number[] } = {};
 
@@ -150,13 +183,13 @@ export async function getWeatherData(cityName: string): Promise<WeatherData> {
     });
   });
 
-  return { current, forecast, airQuality };
+  return { current, forecast, airQuality, uvForecast, sunMoon };
 }
 
 export async function getWeatherByCoordinates(latitude: number, longitude: number): Promise<WeatherData> {
   const [weatherResponse, airQualityResponse, cityName] = await Promise.all([
     fetch(
-      `${WEATHER_API}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=6`
+      `${WEATHER_API}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,moonrise,moonset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=6`
     ),
     fetch(
       `${AIR_QUALITY_API}?latitude=${latitude}&longitude=${longitude}&hourly=us_aqi&timezone=auto&forecast_days=6`
@@ -193,6 +226,26 @@ export async function getWeatherByCoordinates(latitude: number, longitude: numbe
     condition: getWeatherCondition(weatherData.daily.weather_code[index + 1]),
   }));
 
+  const uvForecast: UVData[] = weatherData.daily.time.slice(1, 6).map((date: string, index: number) => {
+    const uvIndex = Math.round(weatherData.daily.uv_index_max[index + 1]);
+    const { category, color } = getUVCategory(uvIndex);
+    return {
+      date,
+      dayOfWeek: getDayOfWeek(date),
+      uvIndex,
+      category,
+      color,
+    };
+  });
+
+  const sunMoon: SunMoonData = {
+    sunrise: formatTime(weatherData.daily.sunrise[0]),
+    sunset: formatTime(weatherData.daily.sunset[0]),
+    moonrise: weatherData.daily.moonrise[0] ? formatTime(weatherData.daily.moonrise[0]) : 'N/A',
+    moonset: weatherData.daily.moonset[0] ? formatTime(weatherData.daily.moonset[0]) : 'N/A',
+    currentUV: weatherData.current.uv_index || 0,
+  };
+
   const airQuality: AQIData[] = [];
   const dailyAQI: { [key: string]: number[] } = {};
 
@@ -223,5 +276,5 @@ export async function getWeatherByCoordinates(latitude: number, longitude: numbe
     });
   });
 
-  return { current, forecast, airQuality };
+  return { current, forecast, airQuality, uvForecast, sunMoon };
 }
