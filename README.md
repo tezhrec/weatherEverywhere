@@ -1,59 +1,71 @@
 # Weather Everywhere!
 
-Weather Everywhere! is a responsive web application that provides real-time and forecasted weather information for any location.  
-The app displays current conditions, UV index, sunrise/sunset and moon times, and visual charts for temperature trends and air quality — all in an intuitive, modern interface.
+Weather Everywhere! is a responsive web application that provides real-time and forecasted weather information for any location worldwide. The app displays current conditions, UV index, sunrise/sunset times with calculated moonrise/moonset data, and interactive charts for temperature trends and air quality — all in an intuitive, modern interface with dark mode support.
 
 ---
 
 ## 🌟 Features
 
-- **Search by Location:** Get weather data anywhere on the globe.
-- **Current Weather Overview:** Temperature, humidity, wind, and condition icons.
-- **5-Day Forecast Cards:** Quickly scan future weather trends.
-- **UV Index Gauge:** Visual UV levels with risk categories.
-- **Sunrise / Sunset & Moonrise / Moonset:** Daily celestial events for the selected location.
-- **Temperature Trend Chart:** View temperature fluctuations over time.
-- **Air Quality Chart:** Visualize air quality index data.
-- **Responsive Design:** Works seamlessly on desktop and mobile.
-- **Powered by APIs:** Fetches data from Open-Meteo and other external services.
-- **Dark Mode-Friendly UI:** TailwindCSS-styled modern theme.
+- **Global Location Search:** Get weather data for any location worldwide using city name search
+- **Current Weather Overview:** Real-time temperature, humidity, wind speed, and dynamic weather condition icons
+- **5-Day Forecast:** Visual forecast cards showing high/low temperatures and weather conditions
+- **UV Index Gauge:** Interactive semi-circular gauge displaying current UV levels with color-coded risk categories
+- **5-Day UV Forecast:** Daily UV index predictions with visual bar charts and risk categories
+- **Sunrise / Sunset Times:** Accurate sun timing data from Open-Meteo API
+- **Moonrise / Moonset Calculations:** Astronomical calculations using SunCalc library for precise moon timing
+- **Temperature Trend Chart:** Interactive Chart.js visualization showing 6-day temperature trends
+- **Air Quality Monitoring:** US AQI visualization with daily averages and color-coded risk levels
+- **Responsive Design:** Fully optimized for desktop, tablet, and mobile devices
+- **Dark Mode Support:** Seamless light/dark theme with automatic icon and color adjustments
+- **Location Persistence:** Automatically saves and loads your last searched location
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend Framework:** [React 18](https://react.dev/) with [Vite](https://vitejs.dev/) and [TypeScript](https://www.typescriptlang.org/)  
-- **Styling:** [TailwindCSS](https://tailwindcss.com/) & [PostCSS](https://postcss.org/)  
-- **Data & API Integration:** [@supabase/supabase-js](https://supabase.com/), Open-Meteo API (weather, UV, air quality)  
-- **Charts & Gauges:** [Chart.js](https://www.chartjs.org/) + [react-chartjs-2](https://react-chartjs-2.js.org/)  
-- **Icons:** [Lucide React](https://lucide.dev/)  
-- **Tooling:** ESLint, TypeScript type checking, Vite build tools
+- **Frontend Framework:** [React 18](https://react.dev/) with [Vite](https://vitejs.dev/) and [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [TailwindCSS](https://tailwindcss.com/) for responsive design & [PostCSS](https://postcss.org/)
+- **APIs:**
+  - [Open-Meteo Weather API](https://open-meteo.com/) - Weather data, UV index, sunrise/sunset
+  - [Open-Meteo Air Quality API](https://open-meteo.com/) - US AQI data
+  - [Open-Meteo Geocoding API](https://open-meteo.com/) - Location search
+- **Astronomical Calculations:** [SunCalc](https://github.com/mourner/suncalc) - Moonrise/moonset calculations
+- **Charts & Visualizations:** [Chart.js](https://www.chartjs.org/) + [react-chartjs-2](https://react-chartjs-2.js.org/)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **Database (Optional):** [@supabase/supabase-js](https://supabase.com/) - Available for data persistence
+- **Tooling:** ESLint, TypeScript compiler, Vite hot module replacement
 
 ---
 
 ## 📂 Project Structure
 
 ```
-weatherEverywhere-main/
-├── index.html                  # App entry point
+project/
+├── index.html                  # HTML entry point
 ├── src/
-│   ├── App.tsx                 # Main App component
-│   ├── main.tsx                # React root render
-│   ├── index.css               # Global styles
-│   ├── components/             # UI Components
-│   │   ├── WeatherCard.tsx         # Displays current weather
-│   │   ├── ForecastCard.tsx        # 5-day forecast
-│   │   ├── UVGauge.tsx             # UV index gauge
-│   │   ├── SunSkySection.tsx       # Sunrise, sunset, moon data
-│   │   ├── TemperatureChart.tsx    # Temperature trends
-│   │   └── AirQualityChart.tsx     # Air quality visualization
-│   ├── services/weatherService.ts  # Handles API requests
-│   ├── utils/weatherIcons.ts       # Weather icon mapping
-│   └── types/weather.ts            # TypeScript interfaces
-├── package.json
-├── tailwind.config.js
-├── vite.config.ts
-└── README.md
+│   ├── App.tsx                 # Main application component with search and layout
+│   ├── main.tsx                # React root initialization
+│   ├── index.css               # Global styles and Tailwind imports
+│   ├── components/             # Reusable UI Components
+│   │   ├── WeatherCard.tsx         # Current weather display with dynamic icons
+│   │   ├── ForecastCard.tsx        # Individual forecast day card
+│   │   ├── UVGauge.tsx             # Semi-circular UV index gauge with SVG
+│   │   ├── SunSkySection.tsx       # Sun/moon times and UV forecast section
+│   │   ├── TemperatureChart.tsx    # 6-day temperature line chart
+│   │   └── AirQualityChart.tsx     # Air quality bar chart with AQI categories
+│   ├── services/
+│   │   └── weatherService.ts       # API integration and data processing
+│   ├── utils/
+│   │   └── weatherIcons.ts         # Weather code to Lucide icon mapping
+│   └── types/
+│       └── weather.ts              # TypeScript interfaces and types
+├── dist/                       # Production build output (generated)
+├── package.json                # Dependencies and scripts
+├── tailwind.config.js          # TailwindCSS configuration
+├── vite.config.ts              # Vite bundler configuration
+├── tsconfig.json               # TypeScript configuration
+├── eslint.config.js            # ESLint rules
+└── README.md                   # Project documentation
 ```
 
 ---
@@ -75,15 +87,20 @@ cd weather-everywhere
 npm install
 ```
 
-### 4. Set Up Environment Variables
-Create a `.env` file in the project root if needed for API keys (e.g., Supabase credentials, weather API).  
-Example:
-```
-VITE_SUPABASE_URL=<your_supabase_url>
-VITE_SUPABASE_KEY=<your_supabase_key>
+### 4. Set Up Environment Variables (Optional)
+The app uses **free, open-source APIs** that require **no API keys** for basic functionality:
+- Open-Meteo Weather API (no authentication required)
+- Open-Meteo Air Quality API (no authentication required)
+- Open-Meteo Geocoding API (no authentication required)
+- SunCalc library (client-side calculations)
+
+**Optional:** If you want to integrate Supabase for data persistence, create a `.env` file:
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-*(The app uses free Open-Meteo data for most weather/UV info, so you may not need API keys for basic functionality.)*
+The app works fully without environment variables and uses localStorage for saving user preferences.
 
 ### 5. Run Development Server
 ```bash
@@ -131,5 +148,31 @@ You can self-host the built files on any static web server:
 
 ---
 
+## 🌐 API Information
+
+### Open-Meteo APIs (Free, No Authentication Required)
+- **Weather Forecast API:** Current conditions, temperature, humidity, wind, weather codes
+- **Air Quality API:** US AQI hourly data for air quality monitoring
+- **Geocoding API:** Location search and coordinate lookup
+
+### SunCalc Library
+- **Client-side calculations** for moonrise and moonset times
+- Accurate astronomical algorithms based on latitude, longitude, and date
+- No external API calls required
+
+---
+
+## 🔄 Data Flow
+
+1. User searches for a location by city name
+2. Geocoding API returns coordinates and location details
+3. Weather, UV, and air quality data fetched in parallel from Open-Meteo
+4. SunCalc calculates moonrise/moonset times based on coordinates
+5. Data processed and displayed in organized, visual components
+6. Last searched location saved to localStorage for persistence
+
+---
+
 ## 📜 License
+
 MIT License © 2025 — Weather Everywhere! Contributors
