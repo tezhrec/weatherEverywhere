@@ -7,6 +7,7 @@ Weather Everywhere! is a responsive web application that provides real-time and 
 ## 🌟 Features
 
 - **Global Location Search:** Get weather data for any location worldwide using city name search
+- **Geolocation Support:** Use your current location to get instant weather information
 - **Current Weather Overview:** Real-time temperature, humidity, wind speed, and dynamic weather condition icons
 - **5-Day Forecast:** Visual forecast cards showing high/low temperatures and weather conditions
 - **UV Index Gauge:** Interactive semi-circular gauge displaying current UV levels with color-coded risk categories
@@ -235,8 +236,8 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 ## 🔄 Data Flow
 
-1. User searches for a location by city name
-2. Geocoding API returns coordinates and location details
+1. User searches for a location by city name or uses geolocation to get current coordinates
+2. Geocoding API returns coordinates and location details (or reverse geocoding for geolocation)
 3. Weather, UV, and air quality data fetched in parallel from Open-Meteo
 4. SunCalc calculates moonrise/moonset times based on coordinates
 5. Data processed and displayed in organized, visual components
