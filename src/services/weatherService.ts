@@ -1,3 +1,4 @@
+import * as SunCalc from 'suncalc';
 import type { WeatherData, CurrentWeather, ForecastDay, AQIData, UVData, SunMoonData } from '../types/weather';
 
 const GEOCODING_API = 'https://geocoding-api.open-meteo.com/v1/search';
@@ -92,6 +93,23 @@ function formatTime(timeString: string): string {
   return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 }
 
+function getMoonTimes(latitude: number, longitude: number): { moonrise: string | null; moonset: string | null } {
+  const now = new Date();
+  const moonTimes = SunCalc.getMoonTimes(now, latitude, longitude);
+
+  const formatMoonTime = (date: Date | undefined): string | null => {
+    if (!date || isNaN(date.getTime())) {
+      return null;
+    }
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  };
+
+  return {
+    moonrise: formatMoonTime(moonTimes.rise),
+    moonset: formatMoonTime(moonTimes.set),
+  };
+}
+
 export async function getWeatherData(cityName: string): Promise<WeatherData> {
   const location = await geocodeCity(cityName);
 
@@ -145,9 +163,13 @@ export async function getWeatherData(cityName: string): Promise<WeatherData> {
     };
   });
 
+  const moonTimes = getMoonTimes(location.latitude, location.longitude);
+
   const sunMoon: SunMoonData = {
     sunrise: formatTime(weatherData.daily.sunrise[0]),
     sunset: formatTime(weatherData.daily.sunset[0]),
+    moonrise: moonTimes.moonrise,
+    moonset: moonTimes.moonset,
     currentUV: weatherData.current.uv_index || 0,
   };
 
@@ -236,9 +258,13 @@ export async function getWeatherByCoordinates(latitude: number, longitude: numbe
     };
   });
 
+  const moonTimes = getMoonTimes(latitude, longitude);
+
   const sunMoon: SunMoonData = {
     sunrise: formatTime(weatherData.daily.sunrise[0]),
     sunset: formatTime(weatherData.daily.sunset[0]),
+    moonrise: moonTimes.moonrise,
+    moonset: moonTimes.moonset,
     currentUV: weatherData.current.uv_index || 0,
   };
 

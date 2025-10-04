@@ -1,4 +1,4 @@
-import { Sunrise, Sunset } from 'lucide-react';
+import { Sunrise, Sunset, MoonIcon } from 'lucide-react';
 import { UVGauge } from './UVGauge';
 import type { UVData, SunMoonData } from '../types/weather';
 
@@ -72,17 +72,43 @@ export function SunSkySection({ uvForecast, sunMoon, darkMode }: SunSkySectionPr
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-6 flex flex-col items-center justify-center transition-colors duration-300">
-          <Sunrise className="w-10 h-10 text-amber-500 mb-3" />
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Sunrise</div>
-          <div className="text-xl font-bold text-gray-800 dark:text-white">{sunMoon.sunrise}</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-5 transition-colors duration-300">
+          <div className="flex items-center gap-3 mb-3 pb-3 border-b border-amber-200 dark:border-gray-600">
+            <Sunrise className="w-8 h-8 text-amber-500" />
+            <div className="flex-1">
+              <div className="text-xs text-gray-600 dark:text-gray-400">Sunrise</div>
+              <div className="text-lg font-bold text-gray-800 dark:text-white">{sunMoon.sunrise}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <MoonIcon className="w-7 h-7 text-blue-400" />
+            <div className="flex-1">
+              <div className="text-xs text-gray-600 dark:text-gray-400">Moonrise</div>
+              <div className="text-base font-semibold text-gray-700 dark:text-gray-300">
+                {sunMoon.moonrise || <span className="text-gray-400 dark:text-gray-500 italic">Data unavailable</span>}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-6 flex flex-col items-center justify-center transition-colors duration-300">
-          <Sunset className="w-10 h-10 text-orange-500 mb-3" />
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Sunset</div>
-          <div className="text-xl font-bold text-gray-800 dark:text-white">{sunMoon.sunset}</div>
+        <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-5 transition-colors duration-300">
+          <div className="flex items-center gap-3 mb-3 pb-3 border-b border-orange-200 dark:border-gray-600">
+            <Sunset className="w-8 h-8 text-orange-500" />
+            <div className="flex-1">
+              <div className="text-xs text-gray-600 dark:text-gray-400">Sunset</div>
+              <div className="text-lg font-bold text-gray-800 dark:text-white">{sunMoon.sunset}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <MoonIcon className="w-7 h-7 text-indigo-400" />
+            <div className="flex-1">
+              <div className="text-xs text-gray-600 dark:text-gray-400">Moonset</div>
+              <div className="text-base font-semibold text-gray-700 dark:text-gray-300">
+                {sunMoon.moonset || <span className="text-gray-400 dark:text-gray-500 italic">Data unavailable</span>}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
