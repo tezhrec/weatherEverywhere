@@ -1,4 +1,5 @@
 import type { WeatherData, CurrentWeather, ForecastDay, AQIData, UVData, SunMoonData } from '../types/weather';
+import * as SunCalc from 'suncalc';
 
 const GEOCODING_API = 'https://geocoding-api.open-meteo.com/v1/search';
 const WEATHER_API = 'https://api.open-meteo.com/v1/forecast';
@@ -145,11 +146,13 @@ export async function getWeatherData(cityName: string): Promise<WeatherData> {
     };
   });
 
+  const moonTimes = SunCalc.getMoonTimes(new Date(), location.latitude, location.longitude);
+
   const sunMoon: SunMoonData = {
     sunrise: formatTime(weatherData.daily.sunrise[0]),
     sunset: formatTime(weatherData.daily.sunset[0]),
-    moonrise: 'N/A',
-    moonset: 'N/A',
+    moonrise: moonTimes.rise ? formatTime(moonTimes.rise.toISOString()) : 'N/A',
+    moonset: moonTimes.set ? formatTime(moonTimes.set.toISOString()) : 'N/A',
     currentUV: weatherData.current.uv_index || 0,
   };
 
@@ -238,11 +241,13 @@ export async function getWeatherByCoordinates(latitude: number, longitude: numbe
     };
   });
 
+  const moonTimes = SunCalc.getMoonTimes(new Date(), latitude, longitude);
+
   const sunMoon: SunMoonData = {
     sunrise: formatTime(weatherData.daily.sunrise[0]),
     sunset: formatTime(weatherData.daily.sunset[0]),
-    moonrise: 'N/A',
-    moonset: 'N/A',
+    moonrise: moonTimes.rise ? formatTime(moonTimes.rise.toISOString()) : 'N/A',
+    moonset: moonTimes.set ? formatTime(moonTimes.set.toISOString()) : 'N/A',
     currentUV: weatherData.current.uv_index || 0,
   };
 
