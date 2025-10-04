@@ -124,15 +124,86 @@ npm run preview
 
 You can self-host the built files on any static web server:
 
-1. Run:
+### Option 1: Static Hosting Platforms
+1. Build the project:
    ```bash
    npm run build
    ```
 2. The production files will be in the `dist/` directory.
 3. Upload the contents of `dist/` to your hosting service:
-   - **Static Hosts:** Netlify, Vercel, GitHub Pages, Cloudflare Pages
-   - **Custom Server:** Copy to `/var/www/html` (for Nginx/Apache)
-   - **Docker Container:** Serve `dist/` via Nginx or Caddy
+   - **Netlify, Vercel, GitHub Pages, Cloudflare Pages:** Connect your repository or upload `dist/`
+   - **Custom Server (Nginx/Apache):** Copy `dist/` contents to `/var/www/html` or your web root
+
+### Option 2: Docker
+
+#### Using Nginx
+Create a `Dockerfile` in the project root:
+
+```dockerfile
+# Build stage
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Production stage
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+Build and run:
+```bash
+docker build -t weather-everywhere .
+docker run -d -p 8080:80 weather-everywhere
+```
+
+Visit **http://localhost:8080**
+
+#### Using Docker Compose
+Create `docker-compose.yml`:
+
+```yaml
+version: '3.8'
+services:
+  weather-app:
+    build: .
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+```
+
+Run with:
+```bash
+docker-compose up -d
+```
+
+#### Custom Nginx Configuration (Optional)
+Create `nginx.conf` for SPA routing:
+
+```nginx
+server {
+    listen 80;
+    server_name localhost;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    gzip on;
+    gzip_types text/css application/javascript application/json;
+}
+```
+
+Update Dockerfile to use custom config:
+```dockerfile
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+```
 
 ---
 
