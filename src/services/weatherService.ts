@@ -97,7 +97,7 @@ export async function getWeatherData(cityName: string): Promise<WeatherData> {
 
   const [weatherResponse, airQualityResponse] = await Promise.all([
     fetch(
-      `${WEATHER_API}?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,moonrise,moonset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=6`
+      `${WEATHER_API}?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=6`
     ),
     fetch(
       `${AIR_QUALITY_API}?latitude=${location.latitude}&longitude=${location.longitude}&hourly=us_aqi&timezone=auto&forecast_days=6`
@@ -148,8 +148,8 @@ export async function getWeatherData(cityName: string): Promise<WeatherData> {
   const sunMoon: SunMoonData = {
     sunrise: formatTime(weatherData.daily.sunrise[0]),
     sunset: formatTime(weatherData.daily.sunset[0]),
-    moonrise: weatherData.daily.moonrise[0] ? formatTime(weatherData.daily.moonrise[0]) : 'N/A',
-    moonset: weatherData.daily.moonset[0] ? formatTime(weatherData.daily.moonset[0]) : 'N/A',
+    moonrise: 'N/A',
+    moonset: 'N/A',
     currentUV: weatherData.current.uv_index || 0,
   };
 
@@ -189,7 +189,7 @@ export async function getWeatherData(cityName: string): Promise<WeatherData> {
 export async function getWeatherByCoordinates(latitude: number, longitude: number): Promise<WeatherData> {
   const [weatherResponse, airQualityResponse, cityName] = await Promise.all([
     fetch(
-      `${WEATHER_API}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,moonrise,moonset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=6`
+      `${WEATHER_API}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=6`
     ),
     fetch(
       `${AIR_QUALITY_API}?latitude=${latitude}&longitude=${longitude}&hourly=us_aqi&timezone=auto&forecast_days=6`
@@ -241,8 +241,8 @@ export async function getWeatherByCoordinates(latitude: number, longitude: numbe
   const sunMoon: SunMoonData = {
     sunrise: formatTime(weatherData.daily.sunrise[0]),
     sunset: formatTime(weatherData.daily.sunset[0]),
-    moonrise: weatherData.daily.moonrise[0] ? formatTime(weatherData.daily.moonrise[0]) : 'N/A',
-    moonset: weatherData.daily.moonset[0] ? formatTime(weatherData.daily.moonset[0]) : 'N/A',
+    moonrise: 'N/A',
+    moonset: 'N/A',
     currentUV: weatherData.current.uv_index || 0,
   };
 
