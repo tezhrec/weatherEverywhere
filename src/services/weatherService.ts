@@ -43,22 +43,43 @@ async function geocodeCity(cityName: string): Promise<GeocodingResult> {
 }
 
 async function reverseGeocode(latitude: number, longitude: number): Promise<string> {
-  const response = await fetch(
-    `${GEOCODING_API}?latitude=${latitude}&longitude=${longitude}&count=1&language=en&format=json`
-  );
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`,
+      {
+        headers: {
+          'User-Agent': 'WeatherEverywhere/1.0',
+        },
+      }
+    );
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return 'My Location';
+    }
+
+    const data = await response.json();
+
+    if (!data || !data.address) {
+      return 'My Location';
+    }
+
+    const address = data.address;
+    const city = address.city || address.town || address.village || address.hamlet || address.county;
+    const country = address.country;
+
+    if (city && country) {
+      return `${city}, ${country}`;
+    } else if (city) {
+      return city;
+    } else if (country) {
+      return country;
+    }
+
+    return 'My Location';
+  } catch (error) {
+    console.error('Reverse geocoding failed:', error);
     return 'My Location';
   }
-
-  const data = await response.json();
-
-  if (!data.results || data.results.length === 0) {
-    return 'My Location';
-  }
-
-  const result = data.results[0];
-  return `${result.name}, ${result.country}`;
 }
 
 function celsiusToFahrenheit(celsius: number): number {
