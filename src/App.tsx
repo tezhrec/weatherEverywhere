@@ -224,19 +224,19 @@ function App() {
             />
 
             <div>
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Charts</h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <TemperatureChart forecast={weatherData.forecast} darkMode={darkMode} />
+                <AirQualityChart airQuality={weatherData.airQuality} darkMode={darkMode} />
+              </div>
+            </div>
+
+            <div>
               <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">5-Day Forecast</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {weatherData.forecast.map((day, index) => (
                   <ForecastCard key={index} forecast={day} />
                 ))}
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Charts</h2>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <TemperatureChart forecast={weatherData.forecast} darkMode={darkMode} />
-                <AirQualityChart airQuality={weatherData.airQuality} darkMode={darkMode} />
               </div>
             </div>
 
