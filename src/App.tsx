@@ -86,6 +86,8 @@ function App() {
         value: city,
       };
       localStorage.setItem('lastLocation', JSON.stringify(savedLocation));
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch weather data');
       setWeatherData(null);
@@ -116,6 +118,8 @@ function App() {
             value: { lat: latitude, lon: longitude },
           };
           localStorage.setItem('lastLocation', JSON.stringify(savedLocation));
+
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Failed to fetch weather data');
           setWeatherData(null);
