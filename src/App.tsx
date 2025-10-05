@@ -166,43 +166,52 @@ function App() {
           </button>
         </header>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-8 transition-colors duration-300">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Enter city name..."
-                className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none text-gray-800 dark:text-white dark:bg-gray-700 transition-colors duration-300 text-lg"
-              />
+        {!weatherData && (
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-8 transition-colors duration-300">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Enter city name..."
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none text-gray-800 dark:text-white dark:bg-gray-700 transition-colors duration-300 text-lg"
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleUseLocation}
+                  disabled={loading}
+                  className="px-6 py-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 flex items-center gap-2 disabled:hover:scale-100"
+                  title="Use my location"
+                >
+                  <Navigation className="w-5 h-5" />
+                  <span className="hidden sm:inline">Use My Location</span>
+                </button>
+                <button
+                  onClick={handleSearch}
+                  disabled={loading}
+                  className="px-6 sm:px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 flex items-center gap-2 disabled:hover:scale-100"
+                >
+                  <Search className="w-5 h-5" />
+                  {loading ? 'Searching...' : 'Get Weather'}
+                </button>
+              </div>
             </div>
-            <div className="flex gap-3">
-              <button
-                onClick={handleUseLocation}
-                disabled={loading}
-                className="px-6 py-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 flex items-center gap-2 disabled:hover:scale-100"
-                title="Use my location"
-              >
-                <Navigation className="w-5 h-5" />
-                <span className="hidden sm:inline">Use My Location</span>
-              </button>
-              <button
-                onClick={handleSearch}
-                disabled={loading}
-                className="px-6 sm:px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 flex items-center gap-2 disabled:hover:scale-100"
-              >
-                <Search className="w-5 h-5" />
-                {loading ? 'Searching...' : 'Get Weather'}
-              </button>
-            </div>
+            {error && (
+              <p className="mt-4 text-red-500 dark:text-red-400 text-center">{error}</p>
+            )}
           </div>
-          {error && (
-            <p className="mt-4 text-red-500 dark:text-red-400 text-center">{error}</p>
-          )}
-        </div>
+        )}
+
+        {!weatherData && !loading && (
+          <div className="text-center py-20">
+            <Sun className="w-24 h-24 text-amber-500 mx-auto mb-6 opacity-50" />
+            <p className="text-xl text-gray-600 dark:text-gray-400">Search for a city to see the weather forecast</p>
+          </div>
+        )}
 
         {weatherData && (
           <div className="space-y-8 animate-fadeIn">
@@ -230,13 +239,44 @@ function App() {
                 <AirQualityChart airQuality={weatherData.airQuality} darkMode={darkMode} />
               </div>
             </div>
-          </div>
-        )}
 
-        {!weatherData && !loading && (
-          <div className="text-center py-20">
-            <Sun className="w-24 h-24 text-amber-500 mx-auto mb-6 opacity-50" />
-            <p className="text-xl text-gray-600 dark:text-gray-400">Search for a city to see the weather forecast</p>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-colors duration-300">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Enter city name..."
+                    className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none text-gray-800 dark:text-white dark:bg-gray-700 transition-colors duration-300 text-lg"
+                  />
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleUseLocation}
+                    disabled={loading}
+                    className="px-6 py-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 flex items-center gap-2 disabled:hover:scale-100"
+                    title="Use my location"
+                  >
+                    <Navigation className="w-5 h-5" />
+                    <span className="hidden sm:inline">Use My Location</span>
+                  </button>
+                  <button
+                    onClick={handleSearch}
+                    disabled={loading}
+                    className="px-6 sm:px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 flex items-center gap-2 disabled:hover:scale-100"
+                  >
+                    <Search className="w-5 h-5" />
+                    {loading ? 'Searching...' : 'Get Weather'}
+                  </button>
+                </div>
+              </div>
+              {error && (
+                <p className="mt-4 text-red-500 dark:text-red-400 text-center">{error}</p>
+              )}
+            </div>
           </div>
         )}
       </div>
