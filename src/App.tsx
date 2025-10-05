@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Sun, Moon, MapPin, Navigation, CloudSun } from 'lucide-react';
+import { Search, Sun, Moon, MapPin, Navigation, CloudSun, Target } from 'lucide-react';
 import { WeatherCard } from './components/WeatherCard';
 import { ForecastCard } from './components/ForecastCard';
 import { TemperatureChart } from './components/TemperatureChart';
@@ -159,17 +159,27 @@ function App() {
             </h1>
           </div>
           <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">Your personal weather companion for any location</p>
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="absolute top-0 right-0 p-3 rounded-full bg-white dark:bg-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-            aria-label="Toggle dark mode"
-          >
-            {darkMode ? (
-              <Sun className="w-5 h-5 text-amber-500" />
-            ) : (
-              <Moon className="w-5 h-5 text-gray-700" />
-            )}
-          </button>
+          <div className="absolute top-0 right-0 flex gap-2">
+            <button
+              onClick={handleUseLocation}
+              className="p-3 rounded-full bg-white dark:bg-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              aria-label="Use my location"
+              disabled={loading}
+            >
+              <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            </button>
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-3 rounded-full bg-white dark:bg-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              aria-label="Toggle dark mode"
+            >
+              {darkMode ? (
+                <Sun className="w-5 h-5 text-amber-500" />
+              ) : (
+                <Moon className="w-5 h-5 text-gray-700" />
+              )}
+            </button>
+          </div>
         </header>
 
         {!weatherData && (
