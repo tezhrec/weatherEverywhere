@@ -230,11 +230,7 @@ function App() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <TemperatureChart forecast={weatherData.forecast} darkMode={darkMode} />
                 <AirQualityChart airQuality={weatherData.airQuality} darkMode={darkMode} />
-              </div>
-              <div className="mt-6">
                 <PrecipitationChart precipitation={weatherData.precipitation} darkMode={darkMode} />
-              </div>
-              <div className="mt-6">
                 <EnvironmentalTrendsChart environmental={weatherData.environmental} darkMode={darkMode} />
               </div>
             </div>
