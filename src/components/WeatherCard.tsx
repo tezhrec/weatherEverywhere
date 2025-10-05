@@ -20,9 +20,16 @@ export function WeatherCard({ weather }: WeatherCardProps) {
         <WeatherIcon className="w-20 h-20 text-blue-100" />
       </div>
 
-      <div className="flex items-baseline mb-8">
-        <span className="text-7xl font-bold">{current.temperature}</span>
-        <span className="text-4xl ml-2">°F</span>
+      <div className="mb-8">
+        <div className="flex items-baseline">
+          <span className="text-7xl font-bold">{current.temperature}</span>
+          <span className="text-4xl ml-2">°F</span>
+        </div>
+        <div className="flex items-center gap-2 mt-2 text-blue-100 text-lg">
+          <span>H: {current.high}°F</span>
+          <span>•</span>
+          <span>L: {current.low}°F</span>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-6 pt-6 border-t border-blue-400 dark:border-blue-600">

@@ -5,6 +5,8 @@ export interface CurrentWeather {
   humidity: number;
   windSpeed: number;
   weatherCode: number;
+  high: number;
+  low: number;
 }
 
 export interface ForecastDay {

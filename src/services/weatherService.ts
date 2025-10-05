@@ -144,6 +144,8 @@ export async function getWeatherData(cityName: string): Promise<WeatherData> {
     humidity: weatherData.current.relative_humidity_2m,
     windSpeed: Math.round(weatherData.current.wind_speed_10m),
     weatherCode: weatherData.current.weather_code,
+    high: Math.round(weatherData.daily.temperature_2m_max[0]),
+    low: Math.round(weatherData.daily.temperature_2m_min[0]),
   };
 
   const forecast: ForecastDay[] = weatherData.daily.time.slice(1, 6).map((date: string, index: number) => ({
@@ -239,6 +241,8 @@ export async function getWeatherByCoordinates(latitude: number, longitude: numbe
     humidity: weatherData.current.relative_humidity_2m,
     windSpeed: Math.round(weatherData.current.wind_speed_10m),
     weatherCode: weatherData.current.weather_code,
+    high: Math.round(weatherData.daily.temperature_2m_max[0]),
+    low: Math.round(weatherData.daily.temperature_2m_min[0]),
   };
 
   const forecast: ForecastDay[] = weatherData.daily.time.slice(1, 6).map((date: string, index: number) => ({
