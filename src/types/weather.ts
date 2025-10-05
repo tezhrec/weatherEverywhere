@@ -49,6 +49,13 @@ export interface PrecipitationData {
   precipitationProbability: number;
 }
 
+export interface EnvironmentalData {
+  date: string;
+  dayOfWeek: string;
+  pressure: number;
+  humidity: number;
+}
+
 export interface WeatherData {
   current: CurrentWeather;
   forecast: ForecastDay[];
@@ -56,4 +63,5 @@ export interface WeatherData {
   uvForecast: UVData[];
   sunMoon: SunMoonData;
   precipitation: PrecipitationData[];
+  environmental: EnvironmentalData[];
 }

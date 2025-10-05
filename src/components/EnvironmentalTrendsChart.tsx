@@ -10,45 +10,45 @@ import {
   Legend,
   Filler,
 } from 'chart.js';
-import type { PrecipitationData } from '../types/weather';
+import type { EnvironmentalData } from '../types/weather';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
-interface PrecipitationChartProps {
-  precipitation: PrecipitationData[];
+interface EnvironmentalTrendsChartProps {
+  environmental: EnvironmentalData[];
   darkMode: boolean;
 }
 
-export function PrecipitationChart({ precipitation, darkMode }: PrecipitationChartProps) {
-  const labels = precipitation.map((day) => day.dayOfWeek.substring(0, 3));
+export function EnvironmentalTrendsChart({ environmental, darkMode }: EnvironmentalTrendsChartProps) {
+  const labels = environmental.map((day) => day.dayOfWeek.substring(0, 3));
 
   const data = {
     labels,
     datasets: [
       {
-        label: 'Precipitation Amount (inches)',
-        data: precipitation.map((day) => day.precipitationAmount),
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-        borderColor: 'rgb(59, 130, 246)',
+        label: 'Pressure (hPa)',
+        data: environmental.map((day) => day.pressure),
+        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+        borderColor: 'rgb(139, 92, 246)',
         borderWidth: 3,
         fill: true,
         tension: 0.4,
         pointRadius: 5,
         pointHoverRadius: 7,
-        pointBackgroundColor: 'rgb(59, 130, 246)',
+        pointBackgroundColor: 'rgb(139, 92, 246)',
         yAxisID: 'y',
       },
       {
-        label: 'Chance of Rain (%)',
-        data: precipitation.map((day) => day.precipitationProbability),
-        backgroundColor: 'rgba(14, 165, 233, 0.1)',
-        borderColor: 'rgb(14, 165, 233)',
+        label: 'Humidity (%)',
+        data: environmental.map((day) => day.humidity),
+        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+        borderColor: 'rgb(34, 197, 94)',
         borderWidth: 3,
         fill: true,
         tension: 0.4,
         pointRadius: 5,
         pointHoverRadius: 7,
-        pointBackgroundColor: 'rgb(14, 165, 233)',
+        pointBackgroundColor: 'rgb(34, 197, 94)',
         yAxisID: 'y1',
       },
     ],
@@ -81,8 +81,8 @@ export function PrecipitationChart({ precipitation, darkMode }: PrecipitationCha
           label: function (context: any) {
             const label = context.dataset.label || '';
             const value = context.parsed.y;
-            if (label.includes('Amount')) {
-              return `${label}: ${value.toFixed(2)} in`;
+            if (label.includes('Pressure')) {
+              return `${label}: ${value} hPa`;
             } else {
               return `${label}: ${value}%`;
             }
@@ -95,10 +95,9 @@ export function PrecipitationChart({ precipitation, darkMode }: PrecipitationCha
         type: 'linear' as const,
         display: true,
         position: 'left' as const,
-        beginAtZero: true,
         title: {
           display: true,
-          text: 'Inches',
+          text: 'Pressure (hPa)',
           color: darkMode ? '#9ca3af' : '#6b7280',
           font: {
             size: 12,
@@ -118,11 +117,11 @@ export function PrecipitationChart({ precipitation, darkMode }: PrecipitationCha
         type: 'linear' as const,
         display: true,
         position: 'right' as const,
-        beginAtZero: true,
+        min: 0,
         max: 100,
         title: {
           display: true,
-          text: 'Probability %',
+          text: 'Humidity %',
           color: darkMode ? '#9ca3af' : '#6b7280',
           font: {
             size: 12,
@@ -154,7 +153,7 @@ export function PrecipitationChart({ precipitation, darkMode }: PrecipitationCha
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 transition-colors duration-300">
-      <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">5-Day Precipitation Forecast</h3>
+      <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Environmental Trends</h3>
       <div className="h-64 md:h-80">
         <Line data={data} options={options} />
       </div>

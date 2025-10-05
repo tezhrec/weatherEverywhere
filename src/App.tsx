@@ -5,6 +5,7 @@ import { ForecastCard } from './components/ForecastCard';
 import { TemperatureChart } from './components/TemperatureChart';
 import { AirQualityChart } from './components/AirQualityChart';
 import { PrecipitationChart } from './components/PrecipitationChart';
+import { EnvironmentalTrendsChart } from './components/EnvironmentalTrendsChart';
 import { SunSkySection } from './components/SunSkySection';
 import { getWeatherData, getWeatherByCoordinates } from './services/weatherService';
 import type { WeatherData } from './types/weather';
@@ -232,6 +233,9 @@ function App() {
               </div>
               <div className="mt-6">
                 <PrecipitationChart precipitation={weatherData.precipitation} darkMode={darkMode} />
+              </div>
+              <div className="mt-6">
+                <EnvironmentalTrendsChart environmental={weatherData.environmental} darkMode={darkMode} />
               </div>
             </div>
 

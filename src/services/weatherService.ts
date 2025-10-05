@@ -1,4 +1,4 @@
-import type { WeatherData, CurrentWeather, ForecastDay, AQIData, UVData, SunMoonData, PrecipitationData } from '../types/weather';
+import type { WeatherData, CurrentWeather, ForecastDay, AQIData, UVData, SunMoonData, PrecipitationData, EnvironmentalData } from '../types/weather';
 import * as SunCalc from 'suncalc';
 
 const GEOCODING_API = 'https://geocoding-api.open-meteo.com/v1/search';
@@ -119,7 +119,7 @@ export async function getWeatherData(cityName: string): Promise<WeatherData> {
 
   const [weatherResponse, airQualityResponse] = await Promise.all([
     fetch(
-      `${WEATHER_API}?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,precipitation_sum,precipitation_probability_max&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=6`
+      `${WEATHER_API}?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,precipitation_sum,precipitation_probability_max,surface_pressure_max,relative_humidity_2m_mean&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=6`
     ),
     fetch(
       `${AIR_QUALITY_API}?latitude=${location.latitude}&longitude=${location.longitude}&hourly=us_aqi&timezone=auto&forecast_days=6`
@@ -216,13 +216,20 @@ export async function getWeatherData(cityName: string): Promise<WeatherData> {
     precipitationProbability: weatherData.daily.precipitation_probability_max[index + 1] || 0,
   }));
 
-  return { current, forecast, airQuality, uvForecast, sunMoon, precipitation };
+  const environmental: EnvironmentalData[] = weatherData.daily.time.slice(1, 6).map((date: string, index: number) => ({
+    date,
+    dayOfWeek: getDayOfWeek(date),
+    pressure: Math.round(weatherData.daily.surface_pressure_max[index + 1] || 0),
+    humidity: Math.round(weatherData.daily.relative_humidity_2m_mean[index + 1] || 0),
+  }));
+
+  return { current, forecast, airQuality, uvForecast, sunMoon, precipitation, environmental };
 }
 
 export async function getWeatherByCoordinates(latitude: number, longitude: number): Promise<WeatherData> {
   const [weatherResponse, airQualityResponse, cityName] = await Promise.all([
     fetch(
-      `${WEATHER_API}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,precipitation_sum,precipitation_probability_max&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=6`
+      `${WEATHER_API}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,precipitation_sum,precipitation_probability_max,surface_pressure_max,relative_humidity_2m_mean&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=6`
     ),
     fetch(
       `${AIR_QUALITY_API}?latitude=${latitude}&longitude=${longitude}&hourly=us_aqi&timezone=auto&forecast_days=6`
@@ -320,5 +327,12 @@ export async function getWeatherByCoordinates(latitude: number, longitude: numbe
     precipitationProbability: weatherData.daily.precipitation_probability_max[index + 1] || 0,
   }));
 
-  return { current, forecast, airQuality, uvForecast, sunMoon, precipitation };
+  const environmental: EnvironmentalData[] = weatherData.daily.time.slice(1, 6).map((date: string, index: number) => ({
+    date,
+    dayOfWeek: getDayOfWeek(date),
+    pressure: Math.round(weatherData.daily.surface_pressure_max[index + 1] || 0),
+    humidity: Math.round(weatherData.daily.relative_humidity_2m_mean[index + 1] || 0),
+  }));
+
+  return { current, forecast, airQuality, uvForecast, sunMoon, precipitation, environmental };
 }
