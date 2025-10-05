@@ -4,6 +4,7 @@ import { WeatherCard } from './components/WeatherCard';
 import { ForecastCard } from './components/ForecastCard';
 import { TemperatureChart } from './components/TemperatureChart';
 import { AirQualityChart } from './components/AirQualityChart';
+import { PrecipitationChart } from './components/PrecipitationChart';
 import { SunSkySection } from './components/SunSkySection';
 import { getWeatherData, getWeatherByCoordinates } from './services/weatherService';
 import type { WeatherData } from './types/weather';
@@ -228,6 +229,9 @@ function App() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <TemperatureChart forecast={weatherData.forecast} darkMode={darkMode} />
                 <AirQualityChart airQuality={weatherData.airQuality} darkMode={darkMode} />
+              </div>
+              <div className="mt-6">
+                <PrecipitationChart precipitation={weatherData.precipitation} darkMode={darkMode} />
               </div>
             </div>
 

@@ -42,10 +42,18 @@ export interface SunMoonData {
   currentUV: number;
 }
 
+export interface PrecipitationData {
+  date: string;
+  dayOfWeek: string;
+  precipitationAmount: number;
+  precipitationProbability: number;
+}
+
 export interface WeatherData {
   current: CurrentWeather;
   forecast: ForecastDay[];
   airQuality: AQIData[];
   uvForecast: UVData[];
   sunMoon: SunMoonData;
+  precipitation: PrecipitationData[];
 }
